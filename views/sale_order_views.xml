@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- Tablero «Remitos a facturar»: lo entregado desde las cajas que falta facturar,
+       por sucursal, cliente y días sin facturar. Se abre ya filtrado en pendientes. -->
+  <record id="view_remitos_a_facturar_list" model="ir.ui.view">
+    <field name="name">sale.order.list.yaguven.remitos</field>
+    <field name="model">sale.order</field>
+    <field name="arch" type="xml">
+      <list string="Remitos a facturar" create="0" default_order="date_order">
+        <field name="yaguven_remito_numero"/>
+        <field name="name" optional="show"/>
+        <field name="date_order" string="Fecha" widget="date"/>
+        <field name="yaguven_dias_sin_facturar"/>
+        <field name="partner_id"/>
+        <field name="yaguven_remito_config_id" optional="show"/>
+        <field name="warehouse_id" string="Sucursal" optional="show"/>
+        <field name="amount_total" sum="Total" optional="hide"/>
+        <field name="amount_to_invoice" string="Pendiente de facturar" sum="Pendiente"/>
+        <field name="invoice_status" optional="show"/>
+        <field name="currency_id" column_invisible="1"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_remitos_a_facturar_search" model="ir.ui.view">
+    <field name="name">sale.order.search.yaguven.remitos</field>
+    <field name="model">sale.order</field>
+    <field name="arch" type="xml">
+      <search string="Remitos a facturar">
+        <field name="yaguven_remito_numero"/>
+        <field name="partner_id"/>
+        <field name="warehouse_id" string="Sucursal"/>
+        <filter name="pendientes" string="Pendientes de facturar"
+                domain="[('invoice_status', '!=', 'invoiced')]"/>
+        <filter name="facturados" string="Facturados"
+                domain="[('invoice_status', '=', 'invoiced')]"/>
+        <separator/>
+        <filter name="viejos_7" string="Más de 7 días"
+                domain="[('date_order', '&lt;', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+        <filter name="viejos_30" string="Más de 30 días"
+                domain="[('date_order', '&lt;', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+        <group>
+          <filter name="por_sucursal" string="Sucursal" context="{'group_by': 'warehouse_id'}"/>
+          <filter name="por_cliente" string="Cliente" context="{'group_by': 'partner_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_remitos_a_facturar" model="ir.actions.act_window">
+    <field name="name">Remitos a facturar</field>
+    <field name="res_model">sale.order</field>
+    <field name="view_mode">list,form</field>
+    <field name="domain">[('yaguven_remito_pos', '=', True), ('state', '=', 'sale')]</field>
+    <field name="context">{'search_default_pendientes': 1}</field>
+    <field name="search_view_id" ref="view_remitos_a_facturar_search"/>
+    <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('view_remitos_a_facturar_list')})]"/>
+  </record>
+
+  <menuitem id="menu_remitos_a_facturar_pos" name="Remitos a facturar"
+            parent="point_of_sale.menu_point_of_sale" action="action_remitos_a_facturar" sequence="30"/>
+  <menuitem id="menu_remitos_a_facturar_sale" name="Remitos a facturar"
+            parent="sale.sale_order_menu" action="action_remitos_a_facturar" sequence="25"/>
+
+  <!-- En el formulario del pedido: de qué caja salió y el número de remito. -->
+  <record id="view_order_form_remito" model="ir.ui.view">
+    <field name="name">sale.order.form.yaguven.remito</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <field name="payment_term_id" position="after">
+        <field name="yaguven_remito_pos" invisible="not yaguven_remito_pos"/>
+        <field name="yaguven_remito_config_id" invisible="not yaguven_remito_pos"/>
+        <field name="yaguven_remito_numero" invisible="not yaguven_remito_pos"/>
+      </field>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!-- La marca va al lado del límite de crédito: son las dos llaves del remito
+       (quién puede y hasta cuánto). En un grupo propio, porque el de «Límites de
+       crédito» se oculta si la compañía no usa límites. -->
+  <record id="view_partner_form_remito" model="ir.ui.view">
+    <field name="name">res.partner.form.yaguven.remito</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="account.view_partner_property_form"/>
+    <field name="arch" type="xml">
+      <group name="credit_limits" position="after">
+        <group string="Remitos" name="yaguven_remitos" groups="account.group_account_invoice,account.group_account_readonly">
+          <field name="yaguven_remito_autorizado"/>
+          <field name="yaguven_remitos_pendientes" invisible="not yaguven_remito_autorizado"/>
+        </group>
+      </group>
+    </field>
+  </record>
+</odoo>

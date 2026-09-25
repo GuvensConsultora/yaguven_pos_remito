@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Los dos botones del remito, junto al «Cotización / Pedido» de pos_sale. -->
+    <t t-name="yaguven_pos_remito.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='this.props.showRemainingButtons']/div/t[@name='o_pricelist_button']" position="before">
+            <t t-call="point_of_sale.controlButton"
+                icon="'local_shipping'"
+                btnText.translate="Remito"
+                btnClasses="'btn-secondary '"
+                onClick="() => this.onClickYaguvenRemito()"
+                disabled="this.pos.disableForSelfOrder">
+            </t>
+            <t t-call="point_of_sale.controlButton"
+                icon="'assignment'"
+                btnText.translate="Facturar remitos"
+                btnClasses="'btn-secondary '"
+                onClick="() => this.onClickYaguvenFacturarRemitos()"
+                disabled="this.pos.disableForSelfOrder">
+            </t>
+        </xpath>
+    </t>
+</templates>
