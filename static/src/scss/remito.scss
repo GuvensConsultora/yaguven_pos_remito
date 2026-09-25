@@ -1,0 +1,5 @@
+// La fila de botones de la caja es flex sin salto: se habilita el salto sólo cuando está
+// la fila de remitos, para que vaya debajo a todo el ancho (yaguven_pos_remito).
+.control-buttons:has(.yg-remito-fila) {
+    flex-wrap: wrap;
+}

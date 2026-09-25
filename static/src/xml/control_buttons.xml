@@ -4,18 +4,20 @@
         <!-- A la vista, junto a «Nota» (pedido del usuario 25/09: que sea muy fácil).
              En pantalla chica la fila no entra: ahí quedan en el menú «⋮», igual que «Nota». -->
         <xpath expr="//t[@t-if='!this.props.showRemainingButtons']/InternalNoteButton" position="after">
-            <button t-if="!this.pos.isSmallProductScreen"
-                    class="btn btn-secondary btn-lg lh-lg text-truncate yg-btn-remito"
-                    t-att-disabled="this.pos.disableForSelfOrder"
-                    t-on-click="() => this.onClickYaguvenRemito()">
-                <i class="oi me-1" data-icon="local_shipping" aria-hidden="true"/>Remito
-            </button>
-            <button t-if="!this.pos.isSmallProductScreen"
-                    class="btn btn-secondary btn-lg lh-lg text-truncate yg-btn-facturar-remitos"
-                    t-att-disabled="this.pos.disableForSelfOrder"
-                    t-on-click="() => this.onClickYaguvenFacturarRemitos()">
-                <i class="oi me-1" data-icon="assignment" aria-hidden="true"/>Facturar remitos
-            </button>
+            <!-- Fila propia debajo (order-last + wrap del contenedor, ver remito.scss): en la
+                 fila de «Cliente / Nota» no entraban y el texto quedaba cortado. -->
+            <div t-if="!this.pos.isSmallProductScreen" class="yg-remito-fila d-flex w-100 gap-2 order-last">
+                <button class="btn btn-secondary btn-lg lh-lg flex-fill yg-btn-remito"
+                        t-att-disabled="this.pos.disableForSelfOrder"
+                        t-on-click="() => this.onClickYaguvenRemito()">
+                    <i class="oi me-1" data-icon="local_shipping" aria-hidden="true"/>Remito
+                </button>
+                <button class="btn btn-secondary btn-lg lh-lg flex-fill yg-btn-facturar-remitos"
+                        t-att-disabled="this.pos.disableForSelfOrder"
+                        t-on-click="() => this.onClickYaguvenFacturarRemitos()">
+                    <i class="oi me-1" data-icon="assignment" aria-hidden="true"/>Facturar remitos
+                </button>
+            </div>
         </xpath>
         <xpath expr="//t[@t-if='this.props.showRemainingButtons']/div/t[@name='o_pricelist_button']" position="before">
             <t t-if="this.pos.isSmallProductScreen">
