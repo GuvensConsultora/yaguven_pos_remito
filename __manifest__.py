@@ -1,6 +1,6 @@
 {
     "name": "POS · Remitos a facturar",
-    "version": "20.0.1.0.0",
+    "version": "20.0.1.1.0",
     "summary": "Entregar con remito desde la caja y facturar después desde cualquier sucursal",
     "description": """
 Entregar mercadería con remito desde la caja, a clientes autorizados, y facturar los

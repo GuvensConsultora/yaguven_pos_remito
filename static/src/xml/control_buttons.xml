@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <!-- Los dos botones del remito, junto al «Cotización / Pedido» de pos_sale. -->
     <t t-name="yaguven_pos_remito.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <!-- A la vista, junto a «Nota» (pedido del usuario 25/09: que sea muy fácil).
+             En pantalla chica la fila no entra: ahí quedan en el menú «⋮», igual que «Nota». -->
+        <xpath expr="//t[@t-if='!this.props.showRemainingButtons']/InternalNoteButton" position="after">
+            <button t-if="!this.pos.isSmallProductScreen"
+                    class="btn btn-secondary btn-lg lh-lg text-truncate yg-btn-remito"
+                    t-att-disabled="this.pos.disableForSelfOrder"
+                    t-on-click="() => this.onClickYaguvenRemito()">
+                <i class="oi me-1" data-icon="local_shipping" aria-hidden="true"/>Remito
+            </button>
+            <button t-if="!this.pos.isSmallProductScreen"
+                    class="btn btn-secondary btn-lg lh-lg text-truncate yg-btn-facturar-remitos"
+                    t-att-disabled="this.pos.disableForSelfOrder"
+                    t-on-click="() => this.onClickYaguvenFacturarRemitos()">
+                <i class="oi me-1" data-icon="assignment" aria-hidden="true"/>Facturar remitos
+            </button>
+        </xpath>
         <xpath expr="//t[@t-if='this.props.showRemainingButtons']/div/t[@name='o_pricelist_button']" position="before">
-            <t t-call="point_of_sale.controlButton"
-                icon="'local_shipping'"
-                btnText.translate="Remito"
-                btnClasses="'btn-secondary '"
-                onClick="() => this.onClickYaguvenRemito()"
-                disabled="this.pos.disableForSelfOrder">
-            </t>
-            <t t-call="point_of_sale.controlButton"
-                icon="'assignment'"
-                btnText.translate="Facturar remitos"
-                btnClasses="'btn-secondary '"
-                onClick="() => this.onClickYaguvenFacturarRemitos()"
-                disabled="this.pos.disableForSelfOrder">
+            <t t-if="this.pos.isSmallProductScreen">
+                <t t-call="point_of_sale.controlButton"
+                    icon="'local_shipping'"
+                    btnText.translate="Remito"
+                    btnClasses="'btn-secondary '"
+                    onClick="() => this.onClickYaguvenRemito()"
+                    disabled="this.pos.disableForSelfOrder">
+                </t>
+                <t t-call="point_of_sale.controlButton"
+                    icon="'assignment'"
+                    btnText.translate="Facturar remitos"
+                    btnClasses="'btn-secondary '"
+                    onClick="() => this.onClickYaguvenFacturarRemitos()"
+                    disabled="this.pos.disableForSelfOrder">
+                </t>
             </t>
         </xpath>
     </t>
